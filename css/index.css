@@ -1,0 +1,7 @@
+body{
+    background-color: #3c6382;
+}
+
+#app:last-child{
+    width: 100%
+}
