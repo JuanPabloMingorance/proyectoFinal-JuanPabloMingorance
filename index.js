@@ -1,14 +1,14 @@
 //Conectando a la API CoinGecko
 async function getData() {
   let datos = await fetch(
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en"
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=15&page=1&sparkline=false&locale=en"
   );
   return await datos.json();
 }
 // Creando el objeto Coin
 class Coin {
-  constructor(name, price, market_cap) {
-    (this.name = name), (this.price = price), (this.market_cap = market_cap);
+  constructor(name, current_price, market_cap, image) {
+    (this.name = name), (this.current_price = current_price), (this.market_cap = market_cap),(this.image = image);
   }
 
   render() {
@@ -19,8 +19,9 @@ class Coin {
             <div class="card text-white bg-info">
                 <div class="card-header text-align-center">${this.name}</div>
                 <div class="card-body">
-                    <h4>${this.price}</h4>
-                    <h6>Market Cap: ${this.market_cap}</h6>
+                    <img src="${this.image}" alt="${this.name}">
+                    <h4>$${this.current_price.toLocaleString("es-ES")}</h4>
+                    <h6>Market Cap: $${this.market_cap.toLocaleString("es-ES")}</h6>
                 </div>
             </div>
         
@@ -29,11 +30,13 @@ class Coin {
   }
 }
 
-const coins = [];
+const coins = getData()
+console.log(coins);
 
-function getCryptos() {
-  coins.forEach((e) => {
-    const newCoin = new Coin(e.name, e.price, e.market_cap);
+async function getCryptos() {
+  let cryptos = await coins;
+  cryptos.forEach((e) => {
+    const newCoin = new Coin(e.name, e.current_price, e.market_cap,e.image);
     newCoin.render();
   });
 }
